@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>当前库存查询</title>
+</head>
+
+<body>
+    <div>
+    <form action="/inventoryQuery" method="get">
+        <label  ><strong>物料名称:</strong></label>
+        <input type="text" name="q" value={{query}}>
+        <input type="submit" value="查找">
+    </form>
+    </div>
+    <div>
+        <table border="1">
+            <tr>
+                <th style="width:30px">Id</th>
+                <th style="width:100px">名称</th>
+                <th style="width:150px">规格型号</th>
+                <th style="width:40px">数量</th>
+                <th style="width:100px">库位号</th>
+                <th style="width:40px">最高库存</th>
+                <th style="width:40px">最低库存</th>
+            </tr>
+            {% if inventorys %}
+                {% for inventory in inventorys %}
+                    <tr>
+                    <td >{{inventory.inventoryId}}</td>
+                    <td >{{inventory.item.itemName}}</td>
+                    <td >{{inventory.item.itemModel}}</td>
+                    <td >{{inventory.amount}}</td>
+                    <td >{{inventory.position}}</td>
+                    <td >{{inventory.max_amount}}</td>
+                    <td >{{inventory.min_amount}}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+            {% endif %}
+
+        </table>
+    </div>
+</body>
+</html>
