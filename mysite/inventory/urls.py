@@ -18,6 +18,6 @@ from inventory import views
 
 urlpatterns = [
     url(r'^inventoryQuery', views.inventoryQuery),
-    url(r'^add_stock_bill/$', views.add_stock_bill),
+    url(r'^add_stock_bill/$', views.add_bill),
     url(r'^success', views.success),
 ]

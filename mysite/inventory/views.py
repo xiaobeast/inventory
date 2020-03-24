@@ -1,5 +1,5 @@
 from django.shortcuts import render, render_to_response
-from inventory.models import Item, Inventory, StockBill
+from inventory.models import Item, Inventory, Bill
 from django.http import HttpResponseRedirect, HttpResponse
 
 
@@ -8,7 +8,7 @@ def getInventoryByItemName(request, itemName):
     inventorys = None
     # 输入物料名称，依据模糊匹配模式显示所有匹配的物料库存，用列表的方式显示在界面上
     if itemName:
-        inventorys = Inventory.objects.filter(item__itemName__contains=itemName)
+        inventorys = Inventory.objects.filter(inventory_item__item_name__contains=itemName)
     # 不输入查询条件时，点击查询按钮返回当前所有的物料库存数据
     else:
         inventorys = Inventory.objects.all()
@@ -26,12 +26,14 @@ def inventoryQuery(request):
             error = True
         else:
             inventorys = getInventoryByItemName('', q)
-            return render_to_response('inventory/inventoryQuery.html',
-                                      {'inventorys': inventorys, 'query': q})
+            return render_to_response(
+                'inventory/inventoryQuery.html',
+                {'inventorys': inventorys, 'query': q}
+            )
     return render_to_response('inventory/inventoryQuery.html')
 
 
-def add_stock_bill(request):
+def add_bill(request):
     errors = []
     items = Item.objects.all()
     ItemId = ''
@@ -43,11 +45,11 @@ def add_stock_bill(request):
         if not request.POST.get('amount', ''):
             errors.append('请输入入库数量!')
         if not request.POST.get('operator', ''):
-            errors.append('请输入入库人员姓名!')
+            errors.append('请输入入库员姓名!')
         else:
             ItemId = int(request.POST.get('itemId', ''))
         if not errors:
-            add_stock_bill = StockBill()
+            add_stock_bill = Bill()
             add_stock_bill.stockBillCode = request.POST.get('stockBillCode', '')
             add_stock_bill.stockDate = request.POST.get('stockDate', '')
             add_stock_bill.amount = request.POST.get('amount', '')
@@ -57,12 +59,16 @@ def add_stock_bill(request):
             add_stock_bill.save()
             return HttpResponseRedirect('/success/')
     return render(request, 'inventory/add_stock_bill.html',
-                  {'errors': errors, 'items':items,
-                   'stockBillCode':request.POST.get('stockBillCode', ''),
-                   'stockDate':request.POST.get('stockDate', ''),
-                   'amount': request.POST.get('amount', ''),
-                   'itemId': ItemId,
-                   'operator': request.POST.get('operator', '')})
+        {
+            'errors': errors,
+            'items':items,
+            'bill_code':request.POST.get('stockBillCode', ''),
+            'bill_date':request.POST.get('stockDate', ''),
+            'bill_amount': request.POST.get('amount', ''),
+            'itemId': ItemId,
+            'bill_operator': request.POST.get('operator', '')
+        }
+    )
 
 
 def success(request):

@@ -14,11 +14,11 @@
             {% endfor %}
         </ul>
         {% endif %}
-    <form action="/add_stock_bill/" method="post" >
+    <form action="/add_stock_bill/" method="POST" >
         {% csrf_token %}
         <p>入库单编号: <input type="text" name="stockBillCode"></p>
         <p>入库时间: <input type="text" name="stockDate"></p>
-        <p>操作员: <input type="text" name="operator"></p>
+        <p>入库员: <input type="text" name="operator"></p>
         <p>物料Id: <input type="text" name="itemId"></p>
         <p>数量: <input type="text" name="amount"></p>
         <input type="submit" value="Submit">
