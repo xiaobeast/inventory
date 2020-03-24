@@ -55,15 +55,15 @@ def add_bill(request):
             add_stock_bill.amount = request.POST.get('amount', '')
             add_stock_bill.operator = request.POST.get('operator', '')
             # ItemId = request.POST.get('itemId', '')
-            add_stock_bill.item = Item.objects.get(itemId=ItemId)  # 注意物料需要保持Model对象
+            add_stock_bill.item = Item.objects.get(pk=ItemId)  # 注意物料需要保持Model对象
             add_stock_bill.save()
             return HttpResponseRedirect('/success/')
     return render(request, 'inventory/add_stock_bill.html',
         {
             'errors': errors,
-            'items':items,
-            'bill_code':request.POST.get('stockBillCode', ''),
-            'bill_date':request.POST.get('stockDate', ''),
+            'items': items,
+            'bill_code': request.POST.get('stockBillCode', ''),
+            'bill_date': request.POST.get('stockDate', ''),
             'bill_amount': request.POST.get('amount', ''),
             'itemId': ItemId,
             'bill_operator': request.POST.get('operator', '')
